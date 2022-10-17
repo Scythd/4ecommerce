@@ -26,12 +26,18 @@ public class User {
     private String password;
 
     @ManyToMany(targetEntity = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "tutorial_tags",
+    @JoinTable(name = "user_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
             inverseJoinColumns = {@JoinColumn(name = "role_id")})
     private List<Role> roles;
 
     @Column
     private byte[] image;
+
+    @OneToOne(mappedBy = "user")
+    private Cart cart;
+
+    @OneToOne(mappedBy = "user")
+    private Library library;
 
 }
