@@ -18,6 +18,4 @@ public class Screenshot {
     @Column
     private byte[] screenshot;
 
-    @ManyToMany(mappedBy = "screenshots")
-    private Item item;
 }
