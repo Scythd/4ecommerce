@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User profile</title>
+    <link rel="stylesheet" type="text/css" href="../static/common.css">
+</head>
+<body>
+<header>
+
+</header>
+<main>
+    <div class="flex-hor" style="justify-content: center">
+       <div class="flex-ver" style="width: 80%;">
+           <div>
+               <label class="label" for="username">Username</label>
+               <label id="username" th:text="${user.username}">&nbsp;</label>
+           </div>
+           <div class="flex-hor" style="justify-content: space-between">
+               <div class="flex-ver" style="justify-content: center">
+                   <label for="profimg">Select profile image</label>
+                   <input type="file" name="profimg" id="profimg">
+               </div>
+               <div style="height: 200px; width: 200px; border-radius: 100px"  class="profile-image-container">
+                   <img src="https://img.money.com/2017/06/170613-how-old-is-old.jpg?quality=10&h=200&w=400" alt="profile image" style="height: 200px; width: 200px; border-radius: 100px">
+               </div>
+           </div>
+            <div style="margin-bottom: 10px">
+                <button class="label">Change password</button>
+                <label for="pwd-new" class="label">New password</label>
+                <input class="label" name="pwd-new" id="pwd-new">
+                <label for="pwd-old" class="label">Old password</label>
+                <input type="password" name="pwd-old" id="pwd-old">
+            </div>
+           <div style="margin-bottom: 10px">
+               <label for="email" class="label">Email</label>
+               <input type="email" name="email" id="email" class="label">
+               <button>change email</button>
+           </div>
+           <div>
+               <button  style="color: red">Delete account</button>
+           </div>
+       </div>
+    </div>
+
+</main>
+<footer>
+
+</footer>
+</body>
+</html>

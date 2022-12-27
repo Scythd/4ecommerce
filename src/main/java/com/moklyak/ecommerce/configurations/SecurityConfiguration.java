@@ -14,8 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
-
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 
 @Configuration
@@ -24,21 +23,27 @@ class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf()
-                .disable()
+        http
+                .csrf()
+                    .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
+                .and()
+                .formLogin()
+                    .loginPage("/login")
+                    .permitAll()
+                .and()
+                .logout().permitAll()
+                .and()
                 .authorizeRequests()
-                .antMatchers("/guest/**", "/assets/**", "/")
+                .antMatchers("/guest/**", "/assets/**", "/", "/resources/**")
                 .permitAll()
                 .antMatchers("/admin/**")
                 .hasAnyRole("ADMIN")
                 .antMatchers("/user/**")
                 .hasAnyRole("USER", "ADMIN")
-                .antMatchers("/login/**")
-                .anonymous()
+                .antMatchers("/login/**", "/register/**")
+                .permitAll()
                 .anyRequest()
-                .authenticated()
-                .and()
-                .httpBasic();
+                .authenticated();
 
         return http.build();
     }

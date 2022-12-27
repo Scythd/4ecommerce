@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration</title>
+    <link rel="stylesheet" type="text/css" href="../static/common.css">
+</head>
+<body>
+<header>
+
+</header>
+<main style="height: 100%">
+    <div class="flex-hor" style="justify-content: center; height: 100%">
+        <div class="flex-ver" style="justify-content: center; height: 100%">
+            <div>
+                <label class="label" for="username">Username</label>
+                <input type="text" name="username" id="username">
+            </div>
+            <div>
+                <label class="label" for="email">Username</label>
+                <input type="email" name="email" id="email">
+            </div>
+            <div>
+                <label class="label" for="password">Password</label>
+                <input type="password" name="password" id="password">
+            </div>
+            <div>
+                <label class="label" for passwordc>Password confirmation</label>
+                <input type="password" name="password-c" id="password-c">
+            </div>
+            <div>
+                <a style="margin: 5px" id="toLogin" th:href="login">Already have an account?</a>
+            </div>
+            <div>
+                <p style="margin: 5px" id="error" th:text="${param.error}">&nbsp;</p>
+            </div>
+            <div class="flex-hor" style="justify-content: center">
+                <button type="submit">Register</button>
+            </div>
+        </div>
+    </div>
+</main>
+<footer>
+
+</footer>
+</body>
+</html>

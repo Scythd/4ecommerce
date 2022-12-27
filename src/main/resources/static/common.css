@@ -1,0 +1,71 @@
+* {
+    margin: 0;
+}
+footer {
+    min-height: 120px;
+    background-color: aqua;
+}
+header {
+    min-height: 120px;
+    background-color: aqua;
+}
+body{
+    height: 100%;
+}
+html{
+    height: 100vh;
+}
+main {
+    min-height: 80%;
+    background-color: dimgrey;
+}
+
+div {
+    border: 1px solid black
+}
+
+.flex-hor{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+.flex-ver{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+}
+
+.item{
+    width: 200px;
+    height: 200px;
+    margin: 5px;
+}
+
+.container {
+    width: 90%;
+    gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+}
+
+.lib-b {
+    width: 30%;
+}
+
+.lib-nav {
+    display: block;
+    margin: 10px;
+
+}
+
+.lib-item{
+    width: 200px;
+    height: 200px;
+    margin: 5px;
+}
+
+.label {
+    display: block;
+}
