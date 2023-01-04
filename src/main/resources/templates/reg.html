@@ -29,7 +29,7 @@
                 <input type="password" name="password-c" id="password-c">
             </div>
             <div>
-                <a style="margin: 5px" id="toLogin" th:href="login">Already have an account?</a>
+                <a style="margin: 5px" id="toLogin" th:href="@{/login}">Already have an account?</a>
             </div>
             <div>
                 <p style="margin: 5px" id="error" th:text="${param.error}">&nbsp;</p>

@@ -4,18 +4,28 @@ import com.moklyak.ecommerce.dtos.LoginDTO;
 import com.moklyak.ecommerce.dtos.RegisterDTO;
 import com.moklyak.ecommerce.entities.Role;
 import com.moklyak.ecommerce.entities.User;
+import com.moklyak.ecommerce.managers.MyUserDetailsManager;
 import com.moklyak.ecommerce.repositories.RoleRepository;
 import com.moklyak.ecommerce.repositories.UserRepository;
+
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
 
 @Controller
@@ -23,49 +33,66 @@ import java.util.List;
 public class AuthController {
 
     @Autowired
-    private static UserRepository userRepository;
+    MainController mc;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
-    private static RoleRepository roleRepository;
+    private RoleRepository roleRepository;
     @Autowired
-    private static PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     static Role userRole;
 
+    @Autowired
+    private AuthenticationManager authManager;
+
     @GetMapping("/login")
-    public static String getLogin(Model model){
-        return "login";
+    public ModelAndView getLogin(Model model, @RequestParam(name = "error", required = false) Object error){
+        if (error != null){
+            model.addAttribute("error", "smth went wrong");
+        }
+        LoginDTO ldto = new LoginDTO();
+        ldto.setPassword("");
+        ldto.setEmail("");
+        model.addAttribute("loginDTO", ldto);
+        return new ModelAndView("login", model.asMap());
     }
 
     @PostMapping("/login")
-    public static String postLogin(Model model, @ModelAttribute LoginDTO loginDTO){
+    public ModelAndView postLogin(HttpServletRequest req, Model model, @ModelAttribute LoginDTO loginDTO){
         // login logic
         String pwd = loginDTO.getPassword();
         loginDTO.setPassword("");
         User user = userRepository.findByEmail(loginDTO.getEmail());
         if (user == null){
-            return handleError(model, loginDTO, "No such user", "reg");
+            return handleError(model, loginDTO, "No such user", "login");
         }
-        pwd = passwordEncoder.encode(pwd);
-        if (user.getPassword().equals(pwd)) {
-
+        if (passwordEncoder.matches(pwd, user.getPassword())) {
+            UsernamePasswordAuthenticationToken authReq
+                    = new UsernamePasswordAuthenticationToken(loginDTO.getEmail(), pwd);
+            Authentication auth = authManager.authenticate(authReq);
+            SecurityContext sc = SecurityContextHolder.getContext();
+            sc.setAuthentication(auth);
+            HttpSession session = req.getSession(true);
+            session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
+            return new ModelAndView("redirect:/", model.asMap());
         } else {
-            return handleError(model, loginDTO, "Invalid username or password", "reg");
+            return handleError(model, loginDTO, "Invalid username or password", "login");
         }
-        return MainController.index(model);
     }
 
-    @GetMapping("/reg")
-    public static String getReg(Model model){
+    @GetMapping("/register")
+    public ModelAndView getReg(Model model){
        /* Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         CustomUser custom = (CustomUser) authentication == null ? null : authentication.getPrincipal();
       */
-        return "reg";
+        return new ModelAndView("reg", model.asMap());
     }
 
-    @PostMapping("/reg")
-    public static String postReg(Model model, RegisterDTO regDTO){
+    @PostMapping("/register")
+    public ModelAndView postReg(Model model, RegisterDTO regDTO){
         // register logic
         if (!regDTO.getPassword().equals(regDTO.getPasswordC())){
             regDTO.setPassword("");
@@ -97,16 +124,24 @@ public class AuthController {
         } else {
             model.addAttribute("dto", regDTO);
             model.addAttribute("error", "User this same email already exist.");
-            return "reg";
+            return new ModelAndView("reg", model.asMap());
         }
-        return MainController.index(model);
+        return new ModelAndView("redirect:/", model.asMap());
     }
 
-    private static String handleError(Model model, Object dto, String msg, String view){
+    private ModelAndView handleError(Model model, Object dto, String msg, String view){
         model.addAttribute("dto", dto);
         model.addAttribute("error", msg);
-        return view;
+        return new ModelAndView(view, model.asMap());
     }
 
-
+    @GetMapping("/logout")
+    private ModelAndView logout(HttpServletRequest req, Model model){
+        try {
+            req.logout();
+        } catch (ServletException e) {
+            System.out.println(e.getMessage());
+        }
+        return new ModelAndView("redirect:/", model.asMap());
+    }
 }

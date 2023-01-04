@@ -16,6 +16,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
+import java.security.SecureRandom;
+
 
 @Configuration
 class SecurityConfiguration {
@@ -24,12 +26,10 @@ class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+
                 .csrf()
                     .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-                .and()
-                .formLogin()
-                    .loginPage("/login")
-                    .permitAll()
+
                 .and()
                 .logout().permitAll()
                 .and()
@@ -40,7 +40,7 @@ class SecurityConfiguration {
                 .hasAnyRole("ADMIN")
                 .antMatchers("/user/**")
                 .hasAnyRole("USER", "ADMIN")
-                .antMatchers("/login/**", "/register/**")
+                .antMatchers("/login/**", "/register/**", "/logout")
                 .permitAll()
                 .anyRequest()
                 .authenticated();
@@ -59,7 +59,7 @@ class SecurityConfiguration {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+    public PasswordEncoder passwordEncoder() throws Exception{
+        return new BCryptPasswordEncoder(BCryptPasswordEncoder.BCryptVersion.$2Y, 8, SecureRandom.getInstanceStrong());
     }
 }

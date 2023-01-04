@@ -39,13 +39,14 @@ public class UserRoleDataConfiguration  implements ApplicationListener<ContextRe
             createRoleIfNotFound("ROLE_USER");
 
             Role adminRole = roleRepository.findByName("ROLE_ADMIN");
+            Role userRole = roleRepository.findByName("ROLE_USER");
             User user = userRepository.findByUsername("admin");
             if (user == null) {
                 user = new User();
                 user.setUsername("admin");
                 user.setPassword(passwordEncoder.encode("admin"));
-                user.setEmail("test@test.com");
-                user.setRoles(List.of(adminRole));
+                user.setEmail("a@a.a");
+                user.setRoles(List.of(adminRole, userRole));
                 userRepository.save(user);
             }
 

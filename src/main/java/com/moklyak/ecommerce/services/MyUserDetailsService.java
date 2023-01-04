@@ -32,9 +32,10 @@ public class MyUserDetailsService implements UserDetailsService {
 
         User user = userRepository.findByEmail(email);
         if (user == null) {
-            return new org.springframework.security.core.userdetails.User(
+            throw new UsernameNotFoundException(email);
+            /*return new org.springframework.security.core.userdetails.User(
                     " ", " ", true, true, true, true,
-                    List.of(roleRepository.findByName("ROLE_USER")));
+                    List.of(roleRepository.findByName("ROLE_USER")));*/
         }
 
         return new org.springframework.security.core.userdetails.User(
