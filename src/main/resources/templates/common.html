@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/resources/static/common.css">
+</head>
+<body>
+<header th:fragment="header">
+    <div sec:authorize="hasRole('ADMIN')">Admin Service</div>
+</header>
+</body>
+</html>
