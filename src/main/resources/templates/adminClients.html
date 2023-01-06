@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:insert="common :: head">
+</head>
+<body>
+<header th:insert="common :: header">
+
+</header>
+<main style="height: 100%">
+    <div class="flex-hor" style="justify-content: center; height: 100%">
+        <div class="flex-ver" style="justify-content: center; height: 100%">
+
+            <div th:each="client : ${clients}" style="justify-content: space-around">
+                <div class="flex-hor">
+                    <div th:text="${client.getEmail()}"></div>
+                    <div th:text="${client.getUsername()}"></div>
+                    <form th:action="@{/admin/profile}" th:method="post">
+                        <input type="hidden" name="email" th:value="${client.getEmail()}"/>
+                        <input  type="submit" value="Go to profile"/>
+                    </form>
+                    <form th:action="@{/admin/unblockUser}" th:method="post">
+                        <input type="hidden" name="email" th:value="${client.getEmail()}"/>
+                        <input th:if="${client.isBlocked()}" th:method="post"  type="submit" value="Unblock the User"/>
+                    </form>
+                    <form th:action="@{/admin/blockUser}" th:method="post">
+                        <input type="hidden" name="email" th:value="${client.getEmail()}"/>
+                        <input th:if="${!client.isBlocked()}" th:method="post" type="submit" value="Block the User"/>
+                    </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+<footer th:insert="common :: footer">
+
+</footer>
+</body>
+</html>

@@ -51,4 +51,7 @@ public class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Library> libraries;
+
+    @ManyToMany(mappedBy = "items")
+    private List<Order> orders;
 }

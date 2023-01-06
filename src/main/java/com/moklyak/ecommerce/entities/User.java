@@ -40,4 +40,11 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Library library;
 
+    @OneToMany(targetEntity = Order.class)
+    @JoinColumn(name = "order_id")
+    private List<Order> orders;
+
+    @Column()
+    private boolean isBlocked;
+
 }

@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Cart</title>
-    <link rel="stylesheet" type="text/css" href="../static/common.css">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:insert="common :: head">
 </head>
 <body>
-<header>
+<header th:insert="common :: header">
 
 </header>
 <main style="height: 100%">
@@ -26,7 +23,7 @@
             </div>
             <div class="flex-hor" style="justify-content: space-between; height: 40px">
                 <div>
-                    <label for="">Total price:</label>
+                    <label>Total price:</label>
                     <span>111</span><span> RUB</span>
                 </div>
                 <button>Buy all</button>
@@ -34,7 +31,7 @@
         </div>
     </div>
 </main>
-<footer>
+<footer th:insert="common :: footer">
 
 </footer>
 </body>

@@ -4,10 +4,10 @@ import com.moklyak.ecommerce.dtos.LoginDTO;
 import com.moklyak.ecommerce.dtos.RegisterDTO;
 import com.moklyak.ecommerce.entities.Role;
 import com.moklyak.ecommerce.entities.User;
-import com.moklyak.ecommerce.managers.MyUserDetailsManager;
 import com.moklyak.ecommerce.repositories.RoleRepository;
 import com.moklyak.ecommerce.repositories.UserRepository;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +32,7 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 @RequestMapping("/")
 public class AuthController {
 
+    String EMAIL_REG_EXP = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
     @Autowired
     MainController mc;
     @Autowired
@@ -47,6 +48,7 @@ public class AuthController {
     @Autowired
     private AuthenticationManager authManager;
 
+    @PreAuthorize("!isAuthenticated()")
     @GetMapping("/login")
     public ModelAndView getLogin(Model model, @RequestParam(name = "error", required = false) Object error){
         if (error != null){
@@ -59,6 +61,7 @@ public class AuthController {
         return new ModelAndView("login", model.asMap());
     }
 
+    @PreAuthorize("!isAuthenticated()")
     @PostMapping("/login")
     public ModelAndView postLogin(HttpServletRequest req, Model model, @ModelAttribute LoginDTO loginDTO){
         // login logic
@@ -67,6 +70,9 @@ public class AuthController {
         User user = userRepository.findByEmail(loginDTO.getEmail());
         if (user == null){
             return handleError(model, loginDTO, "No such user", "login");
+        }
+        if (user.isBlocked()){
+            return handleError(model, loginDTO, "User was blocked", "login");
         }
         if (passwordEncoder.matches(pwd, user.getPassword())) {
             UsernamePasswordAuthenticationToken authReq
@@ -82,8 +88,9 @@ public class AuthController {
         }
     }
 
+    @PreAuthorize("!isAuthenticated()")
     @GetMapping("/register")
-    public ModelAndView getReg(Model model){
+    public ModelAndView getReg(Model model, RegisterDTO regDTO){
        /* Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
         CustomUser custom = (CustomUser) authentication == null ? null : authentication.getPrincipal();
@@ -91,11 +98,23 @@ public class AuthController {
         return new ModelAndView("reg", model.asMap());
     }
 
+
     @PostMapping("/register")
     public ModelAndView postReg(Model model, RegisterDTO regDTO){
         // register logic
+        if (regDTO.getUsername().length() < 3){
+            regDTO.setPassword("");
+            regDTO.setPasswordC("");
+            return handleError(model, regDTO, "Username should be longer then or equals 3 letters", "reg");
+        }
+        if (!regDTO.getEmail().matches(EMAIL_REG_EXP)){
+            regDTO.setPassword("");
+            regDTO.setPasswordC("");
+            return handleError(model, regDTO, "Wrong email pattern, should be something like a@a.a", "reg");
+        }
         if (!regDTO.getPassword().equals(regDTO.getPasswordC())){
             regDTO.setPassword("");
+            regDTO.setPasswordC("");
             return handleError(model, regDTO, "Passwords don't match", "reg");
         }
         regDTO.setPasswordC("");
@@ -126,7 +145,7 @@ public class AuthController {
             model.addAttribute("error", "User this same email already exist.");
             return new ModelAndView("reg", model.asMap());
         }
-        return new ModelAndView("redirect:/", model.asMap());
+        return new ModelAndView("regSuccess", model.asMap());
     }
 
     private ModelAndView handleError(Model model, Object dto, String msg, String view){
@@ -135,6 +154,7 @@ public class AuthController {
         return new ModelAndView(view, model.asMap());
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/logout")
     private ModelAndView logout(HttpServletRequest req, Model model){
         try {

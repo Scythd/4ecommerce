@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:insert="common :: head">
+</head>
+<body>
+<header th:insert="common :: header">
+
+</header>
+<main style="height: 100%">
+    <div class="flex-hor" style="justify-content: center; height: 100%">
+        <div class="flex-ver" style="justify-content: center; height: 100%">
+
+           <div th:each="order : ${orders}" style="justify-content: space-around">
+                <div class="flex-hor">
+                    <div th:text="${order.getUser().getEmail()}"></div>
+                    <div th:text="${order.items}"></div>
+                    <div th:text="${#dates.format(order.dateProvided.getTime(), 'dd-MM-yyyy HH:mm')}">
+                </div>
+           </div>
+        </div>
+    </div>
+</main>
+<footer th:insert="common :: footer">
+
+</footer>
+</body>
+</html>

@@ -29,7 +29,6 @@ class SecurityConfiguration {
 
                 .csrf()
                     .csrfTokenRepository(new HttpSessionCsrfTokenRepository())
-
                 .and()
                 .logout().permitAll()
                 .and()
@@ -40,8 +39,11 @@ class SecurityConfiguration {
                 .hasAnyRole("ADMIN")
                 .antMatchers("/user/**")
                 .hasAnyRole("USER", "ADMIN")
-                .antMatchers("/login/**", "/register/**", "/logout")
-                .permitAll()
+                .antMatchers("/login/**", "/register/**")
+                .not()
+                .authenticated()
+                .antMatchers("/logout")
+                .authenticated()
                 .anyRequest()
                 .authenticated();
 

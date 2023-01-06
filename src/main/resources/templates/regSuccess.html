@@ -6,10 +6,12 @@
 <header th:insert="common :: header">
 
 </header>
-<main>
-    <div class="flex-hor" style="justify-content: center">
-
+<main style="height: 100%">
+  <div class="flex-hor" style="justify-content: center; height: 100%">
+    <div class="flex-ver" style="justify-content: center; height: 100%">
+        <p>Registration Successful! Please <a th:href="@{/login}">Log in</a> to continue</p>
     </div>
+  </div>
 </main>
 <footer th:insert="common :: footer">
 

@@ -7,13 +7,11 @@
 </head>
 <body>
 <header th:fragment="header">
-    <div sec:authentication="name"></div>
-    <div sec:authorize="isAuthenticated()">true</div>
-    <!--span th:text="${#authorization.expression('isAuthenticated()')}"></span-->
-
-
-    <div sec:authorize="${hasRole('ROLE_ADMIN')}">Admin Service</div>
-
+    <p sec:authorize="isAuthenticated()">auth</p>
+    <p sec:authorize="isAnonymous()">anon</p>
+    <p sec:authorize="hasRole('USER')">user</p>
+    <p sec:authorize="hasRole('ROLE_USER')">role user</p>
+    <p sec:authentication="name">user</p>
 </header>
 <footer th:fragment="footer">
 
