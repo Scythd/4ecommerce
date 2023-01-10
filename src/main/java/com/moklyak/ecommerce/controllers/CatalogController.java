@@ -57,7 +57,7 @@ public class CatalogController {
                     })
                     .toList();
         } else {
-            page = itemRepository.findByTagsIn(filter, Pageable.ofSize(PAGE_SIZE)
+            page = itemRepository.findDistinctByTagsIn(filter, Pageable.ofSize(PAGE_SIZE)
                             .withPage(pageNumber))
                     .stream()
                     .map(x-> {
