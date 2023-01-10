@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -20,7 +21,7 @@ public class Cart {
     @JoinTable(name = "cart_items",
             joinColumns = {@JoinColumn(name = "cart_id")},
             inverseJoinColumns = {@JoinColumn(name = "item_id")})
-    private List<Item> items;
+    private Set<Item> items;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")

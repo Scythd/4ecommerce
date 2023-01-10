@@ -17,24 +17,37 @@
                     search
                 </div>
             </div>
-            <div class="flex-hor">
-                <div style="flex: 1">nav</div>
+            <form th:action="'/'" method="get" class="flex-hor">
+                <div style="flex: 1"> </div>
                 <div style="flex: 6" class="flex-ver">
-                    <div>slider</div>
+                    <div>
+                        <input type="text" name="tags" th:value="${tags}">
+                        <input type="submit" value="Filter">
+                    </div>
                     <div class="flex-hor" style="justify-content: center">
-                        <div class="container">
-                            <div class="item">1</div>
-                            <div class="item">2</div>
-                            <div class="item">3</div>
-                            <div class="item">4</div>
-                            <div class="item">5</div>
-                            <div class="item">6</div>
-                            <div class="item">7</div>
-                            <div class="item">8</div>
+                        <div class="container" >
+                            <div th:each="item : ${items}" class="item" >
+                                <a th:href="'/item/' + ${item.getId()}">
+                                <img width="200px" th:src="'/dynamic/poster' + ${item.getPosterURI()}" alt="poster">
+                                <p th:text="${item.getName()}"></p>
+                                <p th:if="${item.getPrice()} > 0" th:text="${'%.2f руб.'.formatted(item.getPrice())}"></p>
+                                <p th:if="${item.getPrice()} == 0" th:text="'Free'"></p>
+                                </a>
+                                <a class="btn" sec:authorize="isAnonymous()" href="/login?error=You should login to use cart">Add to cart</a>
+                                <a class="btn" sec:authorize="isAuthenticated()" th:href="'/cart/addItem/' + ${item.getId()}">Add to cart</a>
+                            </div>
                         </div>
                     </div>
+                    <div class="flex-hor">
+                        <p th:if="${page} < 1" >&nbsp;</p>
+                        <input type="submit" th:if="${page} > 0" th:href="'/'" name="dec" th:value="${page}"/>
+                        <input hidden type="text" name="pageNumber" th:value="${page}">
+                        <p th:text="${page} + 1"></p>
+                        <input type="submit" th:if="!${lastPage}" th:href="'/'" name="inc" th:value="${page} + 2"/>
+                        <p th:if="${lastPage}">&nbsp;</p>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </main>

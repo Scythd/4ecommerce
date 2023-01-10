@@ -10,10 +10,17 @@
     <div class="flex-hor" style="justify-content: center; height: 100%">
         <div class="flex-ver" style="justify-content: center; height: 100%">
 
-           <div th:each="order : ${orders}" style="justify-content: space-around">
-                <div class="flex-hor">
+           <div th:each="order : ${orders}" style="justify-content: space-around; margin-bottom: 60px">
+                <div class="flex-ver">
                     <div th:text="${order.getUser().getEmail()}"></div>
-                    <div th:text="${order.items}"></div>
+                    <div th:each="item : ${order.items}">
+                        <p th:text="${item.getId()}"></p>
+                        <p th:text="${item.getName()}"></p>
+                        <p th:text="${item.getPrice()}"></p>
+                        <p th:text="${item.getFileURI()}"></p>
+                        <p th:text="${item.getPosterURI()}"></p>
+                        <p th:text="${item.getReleaseDate()}"></p>
+                    </div>
                     <div th:text="${#dates.format(order.dateProvided.getTime(), 'dd-MM-yyyy HH:mm')}">
                 </div>
            </div>

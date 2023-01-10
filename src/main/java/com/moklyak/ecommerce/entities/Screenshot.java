@@ -16,6 +16,6 @@ public class Screenshot {
     private Long id;
 
     @Column
-    private byte[] screenshot;
+    private String screenshotURI;
 
 }

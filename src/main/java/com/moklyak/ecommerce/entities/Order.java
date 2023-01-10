@@ -21,8 +21,8 @@ public class Order {
     private Timestamp dateProvided;
 
     @ManyToMany(targetEntity = Item.class)
-    @JoinTable(name = "cart_items",
-            joinColumns = {@JoinColumn(name = "cart_id")},
+    @JoinTable(name = "order_items",
+            joinColumns = {@JoinColumn(name = "order_id")},
             inverseJoinColumns = {@JoinColumn(name = "item_id")})
     private List<Item> items;
 

@@ -3,8 +3,9 @@ package com.moklyak.ecommerce.entities;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Entity
@@ -28,10 +29,10 @@ public class Item {
     private String description;
 
     @Column
-    private String studio;
+    private String creator;
 
     @Column
-    private String aboutGame;
+    private String additionalInfo;
 
     @ManyToMany(targetEntity = Tag.class)
     @JoinTable(name = "item_tags",
@@ -40,10 +41,13 @@ public class Item {
     private List<Tag> tags;
 
     @Column
-    private LocalDate releaseDate;
+    private Date releaseDate;
 
     @Column
-    private byte[] poster;
+    private String posterURI;
+
+    @Column
+    private String fileURI;
 
     @OneToMany(targetEntity = Screenshot.class)
     @JoinColumn(name = "screenshot_id")
@@ -54,4 +58,37 @@ public class Item {
 
     @ManyToMany(mappedBy = "items")
     private List<Order> orders;
+
+    @Column
+    private double price;
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", creator='" + creator + '\'' +
+                ", additionalInfo='" + additionalInfo + '\'' +
+                ", tags=" + tags +
+                ", releaseDate=" + releaseDate +
+                ", posterURI='" + posterURI + '\'' +
+                ", fileURI='" + fileURI + '\'' +
+                ", screenshots=" + screenshots +
+                ", price=" + price +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item item)) return false;
+        return id.equals(item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

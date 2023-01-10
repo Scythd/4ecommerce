@@ -11,8 +11,8 @@
         <div class="flex-hor" style="justify-content: flex-start; width: 80%">
             <div class="flex-ver" style="width: 100%">
                 <div class="flex-hor" style="justify-content: flex-start">
-                    <a href="" class="lib-nav">All</a>
-                    <a href="" class="lib-nav">Favourite</a>
+                    <!--a href="" class="lib-nav">All</a-->
+                    <!--a href="" class="lib-nav">Favourite</a-->
                 </div>
                 <div class="flex-hor" style="justify-content: space-between">
                     <button class="lib-b">sort</button>
@@ -21,15 +21,22 @@
                 </div>
                 <div class="flex-hor" style="justify-content: center">
                     <div class="container">
-                        <div class="lib-item">1</div>
-                        <div class="lib-item">2</div>
-                        <div class="lib-item">3</div>
-                        <div class="lib-item">4</div>
-                        <div class="lib-item">5</div>
-                        <div class="lib-item">7</div>
-                        <div class="lib-item">6</div>
-                        <div class="lib-item">8</div>
+                        <div th:each="item : ${cart.getItems()}" class="lib-item">
+                            <a th:href="'/item/' + ${item.getId()}">
+                            <img width="200px" th:src="'/dynamic/poster' + ${item.getPosterURI()}" alt="poster">
+                            <p th:text="${item.getName()}"></p>
+                            <p th:text="${item.getDescription()}"></p>
+                            </a>
+                            <a class="btn" th:href="${'/dynamic/content/%s%s'.formatted(item.getId().toString(), item.getFileURI())}">Download</a>
+                        </div>
                     </div>
+                </div>
+                <div class="flex-hor">
+                    <p th:if="${page} < 1" >&nbsp;</p>
+                    <a th:if="${page} > 0" th:href="'/?pageNumber=' + ${page - 1}" th:text="${page}"/>
+                    <p th:text="${page} + 1"></p>
+                    <a th:if="!${lastPage}" th:href="'/?pageNumber=' + ${page + 1}" th:text="${page} + 2"/>
+                    <p th:if="${lastPage}">&nbsp;</p>
                 </div>
             </div>
         </div>

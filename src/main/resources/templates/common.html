@@ -7,11 +7,16 @@
 </head>
 <body>
 <header th:fragment="header">
-    <p sec:authorize="isAuthenticated()">auth</p>
-    <p sec:authorize="isAnonymous()">anon</p>
-    <p sec:authorize="hasRole('USER')">user</p>
-    <p sec:authorize="hasRole('ROLE_USER')">role user</p>
-    <p sec:authentication="name">user</p>
+    <div class="flex-ver" style="height: 120px; justify-content: center">
+        <div class="flex-hor">
+            <div sec:authorize="hasRole('ROLE_ADMIN')"><a href="/admin">Admin endpoint</a></div>
+            <div><a sec:authorize="isAuthenticated()" href="/">Catalog</a></div>
+            <div><a sec:authorize="isAuthenticated()" href="/cart/list">Cart</a></div>
+            <div><a sec:authorize="isAuthenticated()" href="/library/list">Library</a></div>
+            <div><a sec:authorize="isAnonymous()" href="/login">Login</a></div>
+            <div><a sec:authorize="isAuthenticated()" href="/logout">Logout</a></div>
+        </div>
+    </div>
 </header>
 <footer th:fragment="footer">
 

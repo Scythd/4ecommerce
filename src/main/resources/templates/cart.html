@@ -9,24 +9,23 @@
 <main style="height: 100%">
     <div class="flex-hor" style="justify-content: center; height: 100%">
         <div class="flex-ver" style="width: 80%; height:  100%; justify-content: space-around">
-            <div class="flex-ver">
-                <div class="cart-item">1</div>
-                <div class="cart-item">2</div>
-                <div class="cart-item">3</div>
-                <div class="cart-item">4</div>
-                <div class="cart-item">5</div>
-                <div class="cart-item">6</div>
-                <div class="cart-item">7</div>
-                <div class="cart-item">8</div>
-                <div class="cart-item">9</div>
-                <div class="cart-item">0</div>
+            <div class="flex-ver" >
+                <p th:text="${error}"></p>
+                <div th:each="item : ${cart.getItems()}" class="cart-item">
+                    <p th:text="${item.getName()}"></p>
+                    <p th:text="${item.getDescription()}"></p>
+                    <p th:text="${'%.2f руб.'.formatted(item.getPrice())}"></p>
+                    <a th:href="'/cart/removeItem/' + ${item.getId()}" ref="">remove</a>
+                </div>
             </div>
             <div class="flex-hor" style="justify-content: space-between; height: 40px">
                 <div>
                     <label>Total price:</label>
-                    <span>111</span><span> RUB</span>
+                    <span th:text="${'%.2f руб.'.formatted(sum)}"></span>
                 </div>
-                <button>Buy all</button>
+                <form th:action="'/cart/buy'" method="get">
+                    <input type="submit" th:value="'Buy all'">
+                </form>
             </div>
         </div>
     </div>

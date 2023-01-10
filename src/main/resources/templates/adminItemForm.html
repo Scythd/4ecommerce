@@ -8,6 +8,38 @@
 </header>
 <main style="height: 100%">
 
+    <!--/*@thymesVar id="addItemDTO" type="com.moklyak.ecommerce.dtos.AddItemDTO"*/-->
+    <form th:action="@{/admin/addItem}" method="post" th:object="${addItemDTO}" enctype="multipart/form-data">
+        <labe>Name</labe>
+        <input type="text" name="name" th:field="*{name}">
+        <br>
+        <labe>Description</labe>
+        <input type="text" name="description" th:field="*{description}">
+        <br>
+        <labe>Creator</labe>
+        <input type="text" name="creator" th:field="*{creator}">
+        <br>
+        <labe>Additional info</labe>
+        <input type="text" name="additionInfo" th:field="*{additionalInfo}">
+        <br>
+        <labe>release Date</labe>
+        <input type="date" name="releaseDate" th:field="*{releaseDate}">
+        <br>
+        <labe>Select poster image</labe>
+        <input type="file" name="poster" accept="image/*" >
+        <br>
+        <labe>Select content file</labe>
+        <input type="file" name="contentItself" >
+        <br>
+        <labe>Tags (comma separated, whitespaces trimmed)</labe>
+        <input type="text" name="tags" th:field="*{tags}">
+        <br>
+        <labe>Price</labe>
+        <input type="number" name="price" th:field="*{price}">
+        <br>
+        <input th:type="submit" th:value="'Add item'">
+    </form>
+    <p th:text="${error}"></p>
 </main>
 <footer th:insert="common :: footer">
 

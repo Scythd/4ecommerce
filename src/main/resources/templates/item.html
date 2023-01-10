@@ -8,7 +8,32 @@
 </header>
 <main>
     <div class="flex-hor" style="justify-content: center">
+        <div class="placeholder">&nbsp;</div>
+        <div class="flex-ver" style="justify-content: center">
+            <div class="flex-hor" style="justify-content: center">
+                <img th:src="${'/dynamic/poster%s'.formatted(item.getPosterURI())}" alt="poster" height="500px">
+                <div class="flex-ver">
+                    <h1 th:text="${item.getName()}"></h1>
+                    <p th:text="${item.getDescription().substring(0, (item.getDescription().length()<1000?item.getDescription().length():1000)) }"></p>
+                    <br>
+                    <label>Release date</label>
+                    <p th:text="${date}"></p>
+                    <br>
+                    <label>Creator</label>
+                    <p th:text="${item.getCreator()}"></p>
+                    <br>
+                    <label>Tags</label>
+                    <p th:text="${tagString}"></p>
+                </div>
+            </div>
+            <p th:text="${item.getDescription()}">
 
+            </p>
+            <p th:text="${item.getAdditionalInfo()}">
+
+            </p>
+        </div>
+        <div class="placeholder">&nbsp;</div>
     </div>
 </main>
 <footer th:insert="common :: footer">

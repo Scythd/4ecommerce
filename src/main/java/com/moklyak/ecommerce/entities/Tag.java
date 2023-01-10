@@ -22,4 +22,10 @@ public class Tag {
     @ManyToMany(mappedBy = "tags")
     private List<Item> items;
 
+    @Override
+    public String toString() {
+        return "Tag{" +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
